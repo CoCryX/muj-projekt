@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import Label from "@/components/Label.vue";
 
 interface Props {
   name: string;
@@ -11,21 +12,33 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// Výchozí obrázek podle pohlaví:
 const defaultPhoto = computed(() => {
   if (props.photo) return props.photo;
   return props.gender === "female"
     ? "https://phlebotomycareertraining.com/wp-content/uploads/2023/11/default-avatar-photo-placeholder-icon-grey-vector-38519922-e1699300466746-768x768.jpg"
     : "https://connectkaro.org/wp-content/uploads/2019/03/placeholder-profile-male-500x500.png";
 });
+
+// label theme pro gender
+const genderTheme = computed(() =>
+  props.gender === "female" ? "pink" : "grey"
+);
+
+// label theme pro věk
+const ageTheme = "blue";
 </script>
 
 <template>
   <div class="profile-card">
     <img :src="defaultPhoto" :alt="name" class="profile-photo" />
+
     <h2>{{ name }}</h2>
-    <p><strong>Věk:</strong> {{ age }}</p>
-    <p><strong>Pohlaví:</strong> {{ gender }}</p>
+
+    <div class="labels">
+      <Label :theme="ageTheme">{{ props.age }} let</Label>
+      <Label :theme="genderTheme">{{ props.gender }}</Label>
+    </div>
+
     <p class="bio">{{ bio }}</p>
   </div>
 </template>
@@ -39,6 +52,7 @@ const defaultPhoto = computed(() => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
+
 .profile-photo {
   width: 120px;
   height: 120px;
@@ -47,4 +61,10 @@ const defaultPhoto = computed(() => {
   margin-bottom: 0.5rem;
 }
 
+.labels {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
 </style>
